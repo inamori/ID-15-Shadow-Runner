@@ -1,9 +1,9 @@
 /*
- SHADOW RUNNER: http://www.team-arg.org/SHRUN-manual.html
-
- Arduboy version 1.1 : http://www.team-arg.org/SHRUN-downloads.html
-
- MADE by TEAM a.r.g. : http://www.team-arg.org/About.html
+ SHADOW RUNNER: http://www.team-arg.org/shrun-manual.html
+ 
+ Arduboy version 1.5 : http://www.team-arg.org/more-about.html
+ 
+ MADE by TEAM a.r.g. : http://www.team-arg.org/more-about.html
 
  2015 - JO3RI - Trodoss
 
@@ -12,6 +12,8 @@
  SimpleButtons: Dreamer3 https://github.com/yyyc514/ArduboyExtra
  ArduboyLib: Dreamer3 https://github.com/yyyc514/ArduboyLib
 
+ Game License: MIT : https://opensource.org/licenses/MIT
+
  */
 
 //determine the game
@@ -19,7 +21,6 @@
 
 #include <SPI.h>
 #include <EEPROM.h>
-#include "Arduboy.h"
 #include "Arglib.h"
 #include "otherbitmaps.h"
 #include "candlebitmaps.h"
@@ -31,10 +32,16 @@
 #include "itembitmaps.h"
 
 //define menu states (on main menu)
-#define STATE_MENU_MAIN    0
-#define STATE_MENU_HELP    1
-#define STATE_MENU_CREDITS 2
-#define STATE_MENU_SOUND   3
+#define STATE_MENU_MAIN          0
+#define STATE_MENU_HELP          1
+#define STATE_MENU_CREDITS       2
+#define STATE_MENU_SOUND         3
+
+//define menu choices (on main menu)
+#define CHOOSE_HELP              0
+#define CHOOSE_INFO              1
+#define CHOOSE_SOUND             2
+#define CHOOSE_PLAY              3
 
 #define GAME_INIT    4
 #define GAME_PLAYING 5
@@ -49,7 +56,7 @@ Arduboy arduboy;
 SimpleButtons buttons (arduboy);
 
 //determines the state of the game
-unsigned char game_state = 0;
+unsigned char gameState = STATE_MENU_MAIN;
 
 // These are all getting a value in STATE_GAME_INIT
 int life;
@@ -57,9 +64,9 @@ unsigned long score;
 unsigned long previousScore;
 byte level;
 
-//generic variable to store selection (on screens)
-unsigned char selection = 0;
-boolean soundyesno = false;
+//generic variable to store menuSelection (on screens)
+unsigned char menuSelection;
+boolean soundYesNo = false;
 
 //these are used for the runner animation in the mainscreen
 int runnerX = -127;
@@ -100,20 +107,21 @@ int itemX[6] = { -64, 96, 48, 128, 128};
 void setup () {
   arduboy.start();
   arduboy.setFrameRate(60);
-  arduboy.drawBitmap(15, 16, TEAMarg, 96, 32, 1);
+  arduboy.drawBitmap(0, 8, TEAMarg2, 128, 48, 1);
   arduboy.display();
   delay(3000);
   arduboy.clearDisplay();
-  game_state = STATE_MENU_MAIN;
-  if (EEPROM.read(EEPROM_AUDIO_ON_OFF)) soundyesno = true;
+  gameState = STATE_MENU_MAIN;
+  if (EEPROM.read(EEPROM_AUDIO_ON_OFF)) soundYesNo = true;
+  menuSelection = CHOOSE_PLAY;
 }
 
 void loop() {
   if (!(arduboy.nextFrame())) return;
   buttons.poll();
-  if (soundyesno == true) arduboy.audio.on();
+  if (soundYesNo == true) arduboy.audio.on();
   else arduboy.audio.off();
-  switch (game_state)
+  switch (gameState)
   {
     case STATE_MENU_MAIN:
       if (arduboy.everyXFrames(4))
@@ -123,7 +131,7 @@ void loop() {
         arduboy.drawBitmap(16, 0, shadowRunner_bitmap, 94, 24, 1);
         arduboy.drawBitmap(49, 26, menu_bitmap, 32, 32, 1);
         arduboy.fillRect(89, 42, 16, 8, 0);
-        switch (soundyesno) {
+        switch (soundYesNo) {
           case true:
             arduboy.drawBitmap(89, 42, yes_bitmap, 16, 8, 1);
             break;
@@ -132,10 +140,10 @@ void loop() {
             break;
         }
         arduboy.fillRect(8, 18, 38, 46, 0);
-        candle_draw(29, selection * 8);
+        candle_draw(29, menuSelection * 8);
         for (byte i = 0; i < 4; i++)
         {
-          if (selection != i) {
+          if (menuSelection != i) {
             arduboy.drawBitmap(49, (i * 8) + 26, shade_bitmap, 32, 8, 0);
             arduboy.drawBitmap(82, (i * 8) + 26, shade_bitmap, 32, 8, 0);
           }
@@ -143,7 +151,7 @@ void loop() {
 
         if (show_runner)
         {
-          arduboy.fillCircle(runnerX + 15, 14, 14, 1);
+          arduboy.drawBitmap(runnerX,-2,spotlight_bitmap,32,32,1);
           runner_draw();
         }
         runnerY = 0;
@@ -155,23 +163,17 @@ void loop() {
         }
         arduboy.display();
       }
-      if (buttons.justPressed(UP_BUTTON))
-      {
-        if (selection > 0) selection--;
-      }
-      if (buttons.justPressed(DOWN_BUTTON))
-      {
-        if (selection < 3) selection++;
-      }
+      if (buttons.justPressed(UP_BUTTON) && (menuSelection > 0)) menuSelection--;
+      if (buttons.justPressed(DOWN_BUTTON) && (menuSelection < 3)) menuSelection++;
       if (buttons.justPressed(A_BUTTON | B_BUTTON | LEFT_BUTTON | RIGHT_BUTTON))
       {
-        switch (selection)
+        switch (menuSelection)
         {
           case 0:
             arduboy.clearDisplay();
-            arduboy.drawBitmap(31, 0, QR_bitmap, 64, 64, 1);
+            arduboy.drawBitmap(31, 0, qrcode_bitmap, 64, 64, 1);
             arduboy.display();
-            game_state = STATE_MENU_HELP;
+            gameState = STATE_MENU_HELP;
             break;
           case 1:
             arduboy.clearDisplay();
@@ -179,18 +181,18 @@ void loop() {
             arduboy.drawBitmap(16, 0, shadowRunner_bitmap, 94, 24, 1);
             arduboy.drawBitmap(15, 23, info_bitmap, 96, 40, 1);
             arduboy.display();
-            game_state = STATE_MENU_CREDITS;
+            gameState = STATE_MENU_CREDITS;
             break;
           case 2:
-            soundyesno = !soundyesno;
-            if (soundyesno == true) arduboy.audio.on();
+            soundYesNo = !soundYesNo;
+            if (soundYesNo == true) arduboy.audio.on();
             else arduboy.audio.off();
             arduboy.audio.save_on_off();
             break;
           case 3:
             arduboy.clearDisplay();
             arduboy.display();
-            game_state = GAME_INIT;
+            gameState = GAME_INIT;
             break;
         }
       }
@@ -202,7 +204,7 @@ void loop() {
         {
           arduboy.clearDisplay();
           arduboy.display();
-          game_state = STATE_MENU_MAIN;
+          gameState = STATE_MENU_MAIN;
         }
       }
       break;
@@ -216,7 +218,7 @@ void loop() {
       if (buttons.justPressed(A_BUTTON | B_BUTTON | LEFT_BUTTON | RIGHT_BUTTON | UP_BUTTON | DOWN_BUTTON))
       {
         arduboy.clearDisplay();
-        game_state = STATE_MENU_MAIN;
+        gameState = STATE_MENU_MAIN;
       }
       arduboy.display();
       break;
@@ -228,7 +230,7 @@ void loop() {
       life = 128;
       level = 0;
       showitems = B00000000;
-      game_state = GAME_PLAYING;
+      gameState = GAME_PLAYING;
       break;
     case GAME_PLAYING:
       //draw the background
@@ -264,12 +266,12 @@ void loop() {
       if (fence1step < -127) 
       {
         fence1step = 128;
-        //fence1id = random(0, 3);
+        fence1id = random(0, 3);
       }
       if (fence2step < -127)
       {
         fence2step = 128;
-        //fence2id = random(2, 5);
+        fence2id = random(2, 5);
       }
       
 
@@ -515,7 +517,7 @@ void loop() {
       }
       score++;
 
-      if (buttons.justPressed(UP_BUTTON | DOWN_BUTTON | RIGHT_BUTTON)) game_state = GAME_PAUSED;
+      if (buttons.justPressed(UP_BUTTON | DOWN_BUTTON | RIGHT_BUTTON)) gameState = GAME_PAUSED;
       if (buttons.justPressed(B_BUTTON))
       {
         if (!jumping)
@@ -536,7 +538,7 @@ void loop() {
       //check the runner's state
       if (life < 0)
       {
-        game_state = GAME_OVER;
+        gameState = GAME_OVER;
         delay(1000L);
       }
       arduboy.display();
@@ -549,7 +551,7 @@ void loop() {
       arduboy.display();
       if (buttons.justPressed(A_BUTTON | B_BUTTON | UP_BUTTON | DOWN_BUTTON | LEFT_BUTTON | RIGHT_BUTTON))
       {
-        game_state = GAME_PLAYING;
+        gameState = GAME_PLAYING;
         arduboy.fillRect(0, 0, 128, 64, 0);
       }
       break;
@@ -572,7 +574,7 @@ void score_draw(int scoreX, int scoreY)
 {
   arduboy.drawBitmap(scoreX, scoreY, score_bitmap, 32, 8, 1);
   char buf[8];
-  itoa(score, buf, 8);
+  ltoa(score, buf, 10); // Numerical base used to represent the value as a string, between 2 and 36, where 10 means decimal base
   char charLen = strlen(buf);
   char pad = 8 - charLen;
 

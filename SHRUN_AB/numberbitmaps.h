@@ -119,5 +119,5 @@ const unsigned char PROGMEM number0_bitmap[] =
   0x46, 0x4A, 0x4A, 0x3E, 0x00, 0x00, 0x00, 0x00,
 };
 
-const unsigned char *number_bitmaps[] = {number0_bitmap, number1_bitmap, number2_bitmap, number3_bitmap, number4_bitmap, number5_bitmap, number6_bitmap, number7_bitmap, number9_bitmap};
+const unsigned char *number_bitmaps[] = {number0_bitmap, number1_bitmap, number2_bitmap, number3_bitmap, number4_bitmap, number5_bitmap, number6_bitmap, number7_bitmap, number8_bitmap, number9_bitmap};
 
