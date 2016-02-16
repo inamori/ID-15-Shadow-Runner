@@ -1,5 +1,7 @@
 # ID-15-Shadow-Runner
-(http://www.team-arg.org/masterfiles/team-arg-ecomd/images/banner-ID-33.png)
+![Image]
+(http://www.team-arg.org/masterfiles/team-arg-shrun/images/banner-ID-15b.png)
+
 “A shadow lost his kid, wondering to far away from the light. Now it must find his colored equal, to become one again.”
 
 Shadow Runner is a classic run, jump & duck game. You only need 2 buttons for gaming: one for jumping, one for sliding and you have a pause button too.
