@@ -187,7 +187,7 @@ void loop() {
             soundYesNo = !soundYesNo;
             if (soundYesNo == true) arduboy.audio.on();
             else arduboy.audio.off();
-            arduboy.audio.save_on_off();
+            arduboy.audio.saveOnOff();
             break;
           case 3:
             arduboy.clearDisplay();
