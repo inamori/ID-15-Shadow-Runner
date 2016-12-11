@@ -20,16 +20,6 @@
 #define STATE_GAME_PAUSE             8
 #define STATE_GAME_OVER              9
 
-//define menu choices (on main menu)
-#define CHOOSE_HELP              0
-#define CHOOSE_INFO              1
-#define CHOOSE_SOUND             2
-#define CHOOSE_PLAY              3
-
-#define RUNNER_RUNNING               0
-#define RUNNER_JUMPING               8
-#define RUNNER_DUCKING               9
-
 #define LEVEL_TO_START_WITH          0
 
 Arduboy2Base arduboy;
@@ -43,9 +33,9 @@ byte menuSelection = STATE_MENU_PLAY; // PLAY menu item is pre-selected
 byte globalCounter = 0;
 
 // These are all getting a value in STATE_GAME_INIT
-int life;
-unsigned long score;
-unsigned long previousScore;
+int lifePlayer;
+unsigned long scorePlayer;
+unsigned long nextLevelAt;
 byte level = LEVEL_TO_START_WITH;
 
 #endif

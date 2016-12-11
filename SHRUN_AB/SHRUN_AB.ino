@@ -7,7 +7,7 @@
 
   2015 - JO3RI - Trodoss
 
-  Special thanks to Dreamer3 for helping with the conversion
+  Special thanks to Dreamer3 for helping with the conversion from Gamby
 
   Game License: MIT : https://opensource.org/licenses/MIT
 
@@ -42,6 +42,7 @@ const FunctionPointer PROGMEM mainGameLoop[] = {
 void setup () {
   arduboy.begin();
   arduboy.setFrameRate(60);
+  arduboy.initRandomSeed();
 }
 
 void loop() {

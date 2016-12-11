@@ -6,9 +6,9 @@
 #include "runner.h"
 
 byte flameid = 0;
-boolean show_runner = false;
+boolean showRunner = false;
 
-void candle_draw (byte x, byte y)
+void drawCandle (byte x, byte y)
 {
   if (arduboy.everyXFrames(4))
   {
@@ -37,12 +37,12 @@ void stateMenuMain()
   if (runnerX > 127)
   {
     runnerX = -127;
-    show_runner = !show_runner;
+    showRunner = !showRunner;
   }
   sprites.drawSelfMasked(16, 0, menuTitle, 0);
   sprites.drawSelfMasked(49, 26, menuItems, 0);
-  sprites.drawSelfMasked(89, 50, yesNo, arduboy.audio.enabled());
-  candle_draw(29, (menuSelection - 2) * 8);
+  sprites.drawSelfMasked(89, 50, menuYesNo, arduboy.audio.enabled());
+  drawCandle(29, (menuSelection - 2) * 8);
   for (byte i = 2; i < 6; i++)
   {
     if (menuSelection != i) {
@@ -50,10 +50,10 @@ void stateMenuMain()
       sprites.drawErase(82, (i * 8) + 10, menuShade, 0);
     }
   }
-  if (show_runner)
+  if (showRunner)
   {
     sprites.drawSelfMasked(runnerX, -2, spotLight, 0);
-    runner_draw();
+    drawRunner();
   }
   if (arduboy.justPressed(UP_BUTTON) && (menuSelection > 2)) menuSelection--;
   else if (arduboy.justPressed(DOWN_BUTTON) && (menuSelection < 5)) menuSelection++;
