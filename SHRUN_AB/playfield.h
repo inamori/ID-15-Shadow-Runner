@@ -143,7 +143,7 @@ void checkInputs()
     if (!jumping)
     {
       jumping = true;
-      runnerframe = RUNNER_JUMPING;
+      runnerFrame = RUNNER_JUMPING;
     }
   }
   else if (arduboy.justPressed(A_BUTTON | LEFT_BUTTON))
@@ -151,10 +151,54 @@ void checkInputs()
     if (!ducking && !jumping)
     {
       ducking = true;
-      runnerframe = RUNNER_DUCKING;
+      runnerFrame = RUNNER_DUCKING;
     }
   }
   else if (arduboy.justPressed(UP_BUTTON | DOWN_BUTTON | RIGHT_BUTTON)) gameState = STATE_GAME_PAUSE;
+}
+
+void checkCollisions()
+{
+  Rect runnerRect = {.x = runnerX + 8, .y = runnerY + 2, .width = 10, .height = 20};
+
+  Rect stoneOneRect = {.x = itemX[ITEM_STONE_ONE] + 2, .y = STONES_Y + 4, .width = 11, .height = 12};
+  Rect stoneTwoRect = {.x = itemX[ITEM_STONE_TWO] + 2, .y = STONES_Y + 4, .width = 11, .height = 12};
+  Rect birdOneRect = {.x = itemX[ITEM_BIRD_ONE] + 2, .y = BIRDS_Y + 4, .width = 12, .height = 20};
+  Rect birdTwoRect = {.x = itemX[ITEM_BIRD_TWO] + 2, .y = BIRDS_Y + 4, .width = 12, .height = 20};
+  Rect extraLifeRect = {.x = itemX[ITEM_EXTRA_LIFE] + 2, .y = HEART_Y + 2, .width = 12, .height = 12};
+
+  if ((showitems & B00000001) && arduboy.collide(runnerRect, stoneOneRect))
+  {
+    lifePlayer -= 4;
+    sound.tone(175, 100);
+  }
+
+  if ((showitems & B00000010) && arduboy.collide(runnerRect, stoneTwoRect))
+  {
+    lifePlayer -= 4;
+    sound.tone(175, 100);
+  }
+
+  if ((showitems & B00000100) && arduboy.collide(runnerRect, birdOneRect))
+  {
+    lifePlayer -= 2;
+    sound.tone(523, 50);
+  }
+
+  if ((showitems & B00001000) && arduboy.collide(runnerRect, birdTwoRect))
+  {
+    lifePlayer -= 2;
+    sound.tone(523, 50);
+  }
+
+  if ((showitems & B00100000) && arduboy.collide(runnerRect, extraLifeRect))
+  {
+    showitems ^= B00100000;
+    itemX[ITEM_EXTRA_LIFE] = 128;
+    lifePlayer = 128;
+    scorePlayer += 500;
+    sound.tone(750, 200);
+  }
 }
 
 #endif

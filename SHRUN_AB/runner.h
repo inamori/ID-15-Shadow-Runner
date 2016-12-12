@@ -11,7 +11,7 @@
 
 int runnerX = -127;
 int runnerY = 0;
-byte runnerframe = 0;
+byte runnerFrame = RUNNER_RUNNING;
 bool jumping = false;
 bool ducking = false;
 byte leap[] = {19, 13, 8, 6, 8, 13, 19};
@@ -24,18 +24,18 @@ void drawRunner()
 {
   if (arduboy.everyXFrames(4))
   {
-    runnerframe++;
+    runnerFrame++;
   }
 
   if (jumping)
   {
     ducking = false;
-    runnerY = leap[runnerframe - RUNNER_JUMPING];
-    if (runnerframe > 14)
+    runnerY = leap[runnerFrame - RUNNER_JUMPING];
+    if (runnerFrame > 14)
     {
       runnerY = 28;
       jumping = false;
-      runnerframe = RUNNER_RUNNING;
+      runnerFrame = RUNNER_RUNNING;
     }
     sprites.drawErase(runnerX, runnerY, shadowRunner, 8);
     sprites.drawSelfMasked(runnerX + eyeX[8], runnerY + eyeY[8], shadowRunnerEyes, eyeFrame[8]);
@@ -45,21 +45,21 @@ void drawRunner()
   {
     jumping = false;
     runnerY = 38;
-    if (runnerframe > 14)
+    if (runnerFrame > 14)
     {
       runnerY = 28;
       ducking = false;
-      runnerframe = RUNNER_RUNNING;
+      runnerFrame = RUNNER_RUNNING;
     }
     sprites.drawErase(runnerX, runnerY, shadowRunner, 9);
     sprites.drawSelfMasked(runnerX + eyeX[9], runnerY + eyeY[9], shadowRunnerEyes, eyeFrame[9]);
   }
 
   else {
-    if (runnerframe > 7)runnerframe = RUNNER_RUNNING;
+    if (runnerFrame > 7)runnerFrame = RUNNER_RUNNING;
 
-    sprites.drawErase(runnerX, runnerY, shadowRunner, runnerframe);
-    sprites.drawSelfMasked(runnerX + eyeX[runnerframe], runnerY + eyeY[runnerframe], shadowRunnerEyes, eyeFrame[runnerframe]);
+    sprites.drawErase(runnerX, runnerY, shadowRunner, runnerFrame);
+    sprites.drawSelfMasked(runnerX + eyeX[runnerFrame], runnerY + eyeY[runnerFrame], shadowRunnerEyes, eyeFrame[runnerFrame]);
   }
 }
 

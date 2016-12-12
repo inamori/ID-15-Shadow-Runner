@@ -28,9 +28,12 @@ void stateGamePlaying()
   drawRunner();
   drawForGround();
   drawScoreAndLive();
+
+  checkItems();
+  checkRunner();
+  checkCollisions();
   checkScoreAndLevel();
   checkInputs();
-  checkRunner();  
 };
 
 void stateGamePause()
