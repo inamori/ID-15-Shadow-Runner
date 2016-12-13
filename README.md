@@ -10,4 +10,8 @@ MADE by TEAM a.r.g. : http://www.team-arg.org/about.html
 
 Special thanks to Dreamer3 for helping with the conversion from Gamby
 
+Thanks to MLXXXP for his help on switching from ARGlib to Arduboy 2 library
+
+**Latest release of the source and arduboy file :** https://github.com/TEAMarg/ID-15-Shadow-Runner/releases/latest
+
 Game License: MIT : https://opensource.org/licenses/MIT
