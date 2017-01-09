@@ -92,13 +92,17 @@ void checkItems()
 
 
 
+int ogreMove[8] = {0,-1,-2,-1,0,1,2,1};
 void drawItems()
 {
-  if (showitems & B00000001) sprites.drawPlusMask(itemX[ITEM_STONE_ONE], 36, stone_plus_mask, 0);
-  if (showitems & B00000010) sprites.drawPlusMask(itemX[ITEM_STONE_TWO], 36, stone_plus_mask, 0);
-  if (showitems & B00000100) sprites.drawErase(itemX[ITEM_BIRD_ONE], 16, bird, birdFrame);
-  if (showitems & B00001000) sprites.drawErase(itemX[ITEM_BIRD_TWO], 16, bird, birdFrame);
-  if (showitems & B00100000) sprites.drawErase(itemX[ITEM_EXTRA_LIFE], 4, heart, heartFrame);
+  if (showitems & B00000001) sprites.drawErase(itemX[ITEM_STONE_ONE], 37, stone_plus_mask, 0);
+  if (showitems & B00000010) sprites.drawErase(itemX[ITEM_STONE_TWO], 37, stone_plus_mask, 0);
+  if (showitems & B00000100) sprites.drawErase(itemX[ITEM_BIRD_ONE]+ogreMove[birdFrame], 16, ogre, 0);
+  if (showitems & B00001000) sprites.drawErase(itemX[ITEM_BIRD_TWO]+ogreMove[birdFrame], 16, ogre, 0);
+  if (showitems & B00100000) sprites.drawErase(itemX[ITEM_EXTRA_LIFE], 4, humberg, 0);
+//  if (showitems & B00000100) sprites.drawErase(itemX[ITEM_BIRD_ONE], 16, bird, birdFrame);
+//  if (showitems & B00001000) sprites.drawErase(itemX[ITEM_BIRD_TWO], 16, bird, birdFrame);
+//  if (showitems & B00100000) sprites.drawErase(itemX[ITEM_EXTRA_LIFE], 4, heart, heartFrame);
 }
 
 

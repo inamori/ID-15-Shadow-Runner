@@ -46,8 +46,8 @@ void stateGamePause()
 void stateGameOver()
 {
   sprites.drawSelfMasked(31, 16, gameOver, 0);
-  drawScore(27, 44);
-  if (arduboy.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
+  drawScore(23, 0);
+  if (arduboy.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_INTRO;
 };
 
 

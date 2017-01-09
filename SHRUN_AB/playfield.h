@@ -78,6 +78,7 @@ void drawBackGround()
 
 void drawFence()
 {
+  return;
   if (arduboy.everyXFrames(1))
   {
     fence1step -= 1;
@@ -101,6 +102,8 @@ void drawFence()
 
 drawForGround()
 {
+  return;
+  
   if (forgroundstep == 128) forgroundid = random(0, 3);
   sprites.drawErase(forgroundstep, -4, forgroundTrees, forgroundid);
   if (arduboy.everyXFrames(2))
@@ -138,7 +141,7 @@ checkScoreAndLevel()
 
 void checkInputs()
 {
-  if (arduboy.justPressed(B_BUTTON))
+  if (arduboy.justPressed(A_BUTTON | B_BUTTON))
   {
     if (!jumping)
     {
@@ -146,7 +149,7 @@ void checkInputs()
       runnerFrame = RUNNER_JUMPING;
     }
   }
-  else if (arduboy.justPressed(A_BUTTON | LEFT_BUTTON))
+  else if (arduboy.justPressed(DOWN_BUTTON))
   {
     if (!ducking && !jumping)
     {
@@ -154,7 +157,7 @@ void checkInputs()
       runnerFrame = RUNNER_DUCKING;
     }
   }
-  else if (arduboy.justPressed(UP_BUTTON | DOWN_BUTTON | RIGHT_BUTTON)) gameState = STATE_GAME_PAUSE;
+//  else if (arduboy.justPressed(UP_BUTTON | DOWN_BUTTON | RIGHT_BUTTON)) gameState = STATE_GAME_PAUSE;
 }
 
 void checkCollisions()
